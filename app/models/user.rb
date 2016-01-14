@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-
+  before_create { self.role ||= :standard}
   after_create :send_favorite_emails
 
   private
