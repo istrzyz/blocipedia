@@ -23,8 +23,15 @@ class ChargesController < ApplicationController
   def new
     @stripe_btn_data = {
       key: "#{ Rails.configuration.stripe[:publishable_key] }",
-      description: "BigMoney Membership - #{current_user.name}",
-      amount: Amount.default
+      description: "BigMoney Membership - #{current_user.email}",
+      amount: 10000
     }
+  end
+
+  def destroy
+    #cancel stripe
+    # make user standard
+    # make wikis public
+    # redirect
   end
 end
