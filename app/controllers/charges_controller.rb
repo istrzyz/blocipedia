@@ -8,7 +8,7 @@ class ChargesController < ApplicationController
     charge = Stripe::Charge.create(
       customer: customer.id,
       amount: Amount.default,
-      description: "BigMoney Membership - #{current_user.email}",
+      description: "Premium Membership - #{current_user.email}",
       currency: 'usd'
     )
 
@@ -23,15 +23,30 @@ class ChargesController < ApplicationController
   def new
     @stripe_btn_data = {
       key: "#{ Rails.configuration.stripe[:publishable_key] }",
-      description: "BigMoney Membership - #{current_user.email}",
+      description: "Premium Membership - #{current_user.email}",
       amount: 10000
     }
   end
 
   def destroy
+
+
+
+#    @wiki = Wiki.find(params[:id])
+#    if @wiki.destroy
+#      flash[:notice] = "\"#{@wiki.title}\" was deleted successfully"
+#      redirect_to wikis_path
+#    else
+#      flash.now[:alert] = "There was an error deleting this wiki"
+#      render :show
+#    end
     #cancel stripe
+    current_user.
     # make user standard
+    current_user.update_attributes(role: 'standard')
     # make wikis public
+    current_user.make_wikis_public
     # redirect
+    redirect_to edit_user_registration_path
   end
 end

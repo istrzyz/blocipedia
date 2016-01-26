@@ -1,12 +1,16 @@
 class WikisController < ApplicationController
   def index
-    @wikis = Wiki.all
-    # @wikis = policy_scope(Wiki)
+    @wikis = policy_scope(Wiki)
   end
 
   def show
     @wiki = Wiki.find(params[:id])
     authorize @wiki
+
+    unless @topic.public || current_user
+      flash[:alert] = "You must be signed in to view your private topics"
+      redirect_to new_session_path
+    end
   end
 
   def new
@@ -19,6 +23,7 @@ class WikisController < ApplicationController
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
     @wiki.user = current_user
+    @wiki.public = params[:wiki][:public]
 
     if @wiki.save
       flash[:notice] = "Wiki saved"
@@ -37,6 +42,7 @@ class WikisController < ApplicationController
     @wiki = Wiki.find(params[:id])
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
+    @wiki.public = params[:wiki][:public]
 
     if @wiki.save
       flash[:notice] = "Wiki was updated"
@@ -58,4 +64,8 @@ class WikisController < ApplicationController
       render :show
     end
   end
+
+  private
+  def wiki_params
+    params.require(:wiki).permit(:title, :body, :public)
 end
