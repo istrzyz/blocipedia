@@ -7,10 +7,10 @@ class WikisController < ApplicationController
     @wiki = Wiki.find(params[:id])
     authorize @wiki
 
-    unless @topic.public || current_user
-      flash[:alert] = "You must be signed in to view your private topics"
-      redirect_to new_session_path
-    end
+#    unless @wiki.public || current_user
+#      flash[:alert] = "You must be signed in to view your private topics"
+#      redirect_to new_session_path
+#    end
   end
 
   def new
@@ -68,4 +68,5 @@ class WikisController < ApplicationController
   private
   def wiki_params
     params.require(:wiki).permit(:title, :body, :public)
+  end
 end

@@ -19,6 +19,11 @@ class User < ActiveRecord::Base
     role == "premium"
   end
 
+  def get_role
+    return "(Admin)" if self.admin?
+    self.premium? ? "(Premium)" : "(Standard)"
+  end
+
   private
     def send_user_emails
       user.new.each do |new|

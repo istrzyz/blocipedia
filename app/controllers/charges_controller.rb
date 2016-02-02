@@ -7,13 +7,15 @@ class ChargesController < ApplicationController
     )
     charge = Stripe::Charge.create(
       customer: customer.id,
-      amount: Amount.default,
+      amount: 10000,
       description: "Premium Membership - #{current_user.email}",
       currency: 'usd'
     )
 
+    current_user.update_attributes(role: "premium")
+
     flash[:notice] = "Thanks for all the money, #{current_user.email}! Feel free to pay me again."
-    redirect_to user_path(current_user) # or wherever
+    redirect_to root_path
 
   rescue Stripe::CardError => e
     flash.now[:alert] = e.message
@@ -29,9 +31,6 @@ class ChargesController < ApplicationController
   end
 
   def destroy
-
-
-
 #    @wiki = Wiki.find(params[:id])
 #    if @wiki.destroy
 #      flash[:notice] = "\"#{@wiki.title}\" was deleted successfully"

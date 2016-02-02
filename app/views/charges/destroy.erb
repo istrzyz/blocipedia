@@ -1,0 +1,7 @@
+# Set your secret key: remember to change this to your live secret key in production
+# See your keys here https://dashboard.stripe.com/account/apikeys
+
+Stripe.api_key = "sk_test_xGAM32cnP9cH4wHr2bkRaCYS"
+
+customer = Stripe::Customer.retrieve("cus_3R1W8PG2DmsmM9")
+customer.subscriptions.retrieve("sub_3R3PlB2YlJe84a").delete
